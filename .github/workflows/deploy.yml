@@ -31,9 +31,11 @@ jobs:
         run: npm run build
         env:
           # 專案頁網址是 https://<org>.github.io/ssp-website/，見 next.config.ts /
-          # src/lib/asset-path.ts。若之後改自訂網域（從根目錄 serve），把這行拿掉即可。
-          # 要跟 repo 名稱一致（目前是 ssp-website，不是資料夾名稱 ssp-marketing-site）。
+          # src/lib/asset-path.ts。若之後改自訂網域（從根目錄 serve），把這兩行改成
+          # NEXT_PUBLIC_SITE_ORIGIN=https://<自訂網域>、NEXT_PUBLIC_BASE_PATH 拿掉即可。
+          # basePath 要跟 repo 名稱一致（目前是 ssp-website，不是資料夾名稱 ssp-marketing-site）。
           NEXT_PUBLIC_BASE_PATH: /ssp-website
+          NEXT_PUBLIC_SITE_ORIGIN: https://lyztw-tech.github.io
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./out

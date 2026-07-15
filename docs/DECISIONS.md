@@ -4,6 +4,18 @@
 
 ---
 
+## 2026-07-15 — 部署選 GitHub Pages（純靜態），預約表單改 mailto
+- **決定**：官網部署到 GitHub Pages（`output: 'export'`），原本打 `/api/lead` 寫本機檔案的預約表單整支拿掉，CTA 改成 `mailto:` 連結。
+- **考慮過的選項**：① 換 Formspree 這類免費第三方表單服務、保留完整表單體驗、仍可留在 GitHub Pages；② 直接拿掉表單、只留靜態內容；③ 改部署到 Vercel/Netlify（原生支援 Next.js API Routes，表單完全不用改）。
+- **理由**：使用者要求先求快、能上線就好，選了②。
+- **取捨**：現在完全沒有名單/轉換率數據，且 mailto 沒有結構化欄位（姓名/電話/工地規模），全靠對方自己在信裡寫清楚。**這個取捨之後應該重新評估**——如果开始有真的業務量，值得花一點時間換回 Formspree 方案（不用整個搬家到 Vercel，仍可留在 GitHub Pages）。
+
+## 2026-07-15 — repo 設為 Public（而非升級付費方案）
+- **決定**：`lyztw-tech/ssp-website` 設成 Public repo，不升級 GitHub 付費方案。
+- **考慮過的選項**：Private repo + 升級 GitHub Pro（Private repo 要用 GitHub Pages 需要付費）／改成 Public。
+- **理由**：這是要公開給客戶看的行銷官網，內容本來就該公開，程式碼裡也沒有機密（已確認沒有 API 金鑰/密碼被 commit），設 Public 沒有額外風險，且 GitHub Pages 對 Public repo 完全免費。
+- **取捨**：原始碼(含文案、視覺設計細節)任何人都看得到，如果之後想保密某些商業邏輯或文案草稿，要另外處理（例如敏感內容不進這個 repo）。
+
 ## 2026-07-12 — Header 改用「同心圓＋雷達 ping」的自製 logo 造型
 - **決定**：換掉純 unicode `◉` 塞色塊的舊 logo，改做 `NavMark`（同心圓光圈＋teal→blue 漸層核心＋會 blink 的訊號點＋雷達式 ping）。
 - **考慮過的選項**：維持簡單色塊 logo／做一個呼應「即時監測」語意的自製圖形。

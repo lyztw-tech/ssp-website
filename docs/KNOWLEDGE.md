@@ -4,6 +4,12 @@
 
 ---
 
+## GitHub Pages 專案頁的 basePath，`<img src>`/`<a href>` 不會自動加
+- **現象**：`next.config.ts` 設了 `basePath: '/ssp-website'` 後，`next/link` 的連結都正常加了前綴，但所有 `<img src="/shots/...">` 產品截圖跟頁尾用 `<a href="/privacy">` 寫的連結，部署到 GitHub Pages 後全部 404／連到錯的網域根目錄。
+- **原因**：Next.js 只有 `next/link`、`next/image`、`next/script` 這些自己的元件會自動處理 `basePath`；純字串寫的 `<img src="/...">` 或 `<a href="/...">` 完全不知道 `basePath`的存在，會直接拿使用者網域根目錄去解析。
+- **解法**：① 內部連結一律用 `next/link`（自動處理）；② 靜態圖片一律包一層 `asset()` helper（`src/lib/asset-path.ts`），從 `NEXT_PUBLIC_BASE_PATH` 這個 env 讀值組出正確路徑，本機 dev 沒設這個 env 就是 no-op。**新增任何 `<img src="/...">` 都要記得包這層，不要抄舊的寫死絕對路徑。**
+- **怎麼抓漏的**：本機起一顆假的靜態伺服器、完整模擬 `<org>.github.io/<repo>/` 這個路徑結構跑一次，比在 `next dev`（沒有 basePath）下測快很多，dev 模式測不出這個問題。
+
 ## 鎖色區塊的 color 要重新宣告，不能只靠繼承
 - **現象**：淺色模式下，被鎖定要維持深色 token 的區塊（產品展示框、夜間值班區）文字顏色沒有跟著鎖住。
 - **原因**：`color` 在 `body` 這一層就已經解析完成（CSS custom property 的值在繼承時已定值），鎖 token 的子區塊光是換 `--text` 變數值不會生效。
