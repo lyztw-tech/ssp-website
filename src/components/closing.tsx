@@ -285,9 +285,8 @@ export function Faq() {
   );
 }
 
-/** 靜態站沒有後端可以收表單（GitHub Pages 只能放純靜態檔案），CTA 一律走 mailto。
- * TODO：CONTACT_EMAIL 目前是佔位符，上線前換成真的聯絡信箱。 */
-const CONTACT_EMAIL = 'contact@CHANGE_ME.tw';
+/** 靜態站沒有後端可以收表單（GitHub Pages 只能放純靜態檔案），CTA 一律走 mailto。 */
+const CONTACT_EMAIL = 'dev@lyztw.com';
 const CONTACT_MAILTO = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('預約智慧職安平台現場示範')}`;
 
 export function Cta() {
