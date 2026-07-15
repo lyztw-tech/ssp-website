@@ -1,0 +1,49 @@
+# 靜態輸出（output: 'export'）+ 部署到 GitHub Pages。
+# 前置需求（在 repo Settings → Pages）：Source 選「GitHub Actions」（不是 branch）。
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - name: Build (static export)
+        run: npm run build
+        env:
+          # 專案頁網址是 https://<org>.github.io/ssp-website/，見 next.config.ts /
+          # src/lib/asset-path.ts。若之後改自訂網域（從根目錄 serve），把這行拿掉即可。
+          # 要跟 repo 名稱一致（目前是 ssp-website，不是資料夾名稱 ssp-marketing-site）。
+          NEXT_PUBLIC_BASE_PATH: /ssp-website
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>阿誠的一天｜智慧職安平台 動畫短片</title>
+<style>
+/* ═══ 《阿誠的一天》以人為主體的系統之旅 ═══ */
+:root {
+  --bg: #05070b; --panel: #0f141c; --line: rgba(235,245,255,.1); --line-2: rgba(235,245,255,.18);
+  --text: #f2f6fa; --text-2: #a2aebb; --text-3: #667381;
+  --teal: #2dd4bf; --amber: #fbbf24; --red: #f45b5b; --ok: #34d399;
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro TC', 'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { background: #020408; color: var(--text); font-family: var(--font); display: grid; place-items: center; }
+.film { position: relative; width: min(100vw, 177.8vh); aspect-ratio: 16/9; background: var(--bg); overflow: hidden; border-radius: 10px; box-shadow: 0 40px 120px rgba(0,0,0,.7); }
+@media (max-width: 700px) { .film { border-radius: 0; } }
+.scene { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .7s ease; }
+.scene.on { opacity: 1; visibility: visible; }
+.scene .a1, .scene .a2, .scene .a3, .scene .a4 { animation-play-state: paused; }
+.scene.on .a1, .scene.on .a2, .scene.on .a3, .scene.on .a4 { animation-play-state: running; }
+
+.clock { position: absolute; top: 4.2%; right: 4.5%; font-size: clamp(14px,2.2vw,26px); font-weight: 800; color: var(--text-2); font-variant-numeric: tabular-nums; }
+.clock b { color: var(--text); }
+.tag { position: absolute; top: 4.2%; left: 4.5%; display: inline-flex; align-items: center; gap: 8px; font-size: clamp(10px,1.2vw,14px); letter-spacing: .14em; color: var(--teal); }
+.tag i { width: 7px; height: 7px; border-radius: 50%; background: var(--teal); }
+.cap { position: absolute; left: 50%; transform: translateX(-50%); bottom: 6%; width: min(88%, 940px); text-align: center; z-index: 6; }
+.cap h2 { font-size: clamp(18px,3vw,38px); font-weight: 800; }
+.cap p { margin-top: .5em; font-size: clamp(12px,1.6vw,19px); color: var(--text-2); }
+.cap .hl { color: var(--teal); }
+
+.bar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: linear-gradient(0deg, rgba(2,4,8,.85), transparent); opacity: .25; transition: opacity .3s; }
+.film:hover .bar, .bar:focus-within { opacity: 1; }
+.bar button { font: inherit; color: var(--text); background: rgba(255,255,255,.08); border: 1px solid var(--line-2); border-radius: 999px; height: 34px; padding: 0 16px; cursor: pointer; font-size: 13px; }
+.segs { flex: 1; display: flex; gap: 5px; }
+.seg { flex: 1; height: 4px; border-radius: 2px; background: rgba(255,255,255,.14); overflow: hidden; cursor: pointer; }
+.seg i { display: block; height: 100%; width: 0%; background: var(--teal); }
+.seg.done i { width: 100%; }
+
+.ground { position: absolute; left: 0; right: 0; bottom: 16%; height: 2px; background: var(--line-2); }
+
+/* ── 主角阿誠（走路循環、戴帽/脫帽） ── */
+.hero-slot { position: absolute; bottom: 16%; width: 6.2%; aspect-ratio: 60/130; }
+.hero-slot svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.hero-slot .legL, .hero-slot .legR { transform-origin: 50% 10%; transform-box: fill-box; }
+.hero-slot .armL, .hero-slot .armR { transform-origin: 50% 12%; transform-box: fill-box; }
+.hero-slot.walking .legL { animation: swing .5s ease-in-out infinite; }
+.hero-slot.walking .legR { animation: swing .5s ease-in-out infinite reverse; }
+.hero-slot.walking .armL { animation: swing .5s ease-in-out infinite reverse; }
+.hero-slot.walking .armR { animation: swing .5s ease-in-out infinite; }
+.hero-slot.walking { animation: bob .5s ease-in-out infinite; }
+@keyframes swing { 0%,100% { transform: rotate(17deg); } 50% { transform: rotate(-17deg); } }
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-1.5%); } }
+.hero-slot.nohat .hat { opacity: 0; }
+
+/* 手機框 / 電視框 */
+.ph { position: absolute; border-radius: 4.2%/2.4%; overflow: hidden; border: 2px solid #1c242e; outline: 6px solid #05070b; background: #000; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+.ph img { width: 100%; display: block; }
+.tv { position: absolute; border-radius: 10px; overflow: hidden; border: 2px solid #1c242e; outline: 8px solid #0a0f16; background: #000; box-shadow: 0 30px 90px rgba(0,0,0,.65); }
+.tv img { width: 100%; display: block; }
+
+.chip { position: absolute; background: rgba(52,211,153,.13); border: 1px solid rgba(52,211,153,.5); color: var(--ok); font-size: clamp(11px,1.4vw,16px); font-weight: 700; padding: .4em 1em; border-radius: 999px; opacity: 0; white-space: nowrap; }
+@keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes rise { from { transform: translateY(6%); opacity: 0; } to { opacity: 1; } }
+
+.waves { position: absolute; width: 4%; aspect-ratio: 1; }
+.waves i { position: absolute; inset: 0; border: 2px solid var(--amber); border-radius: 50%; opacity: 0; animation: wave 1.6s ease-out infinite; animation-play-state: inherit; }
+.waves i:nth-child(2) { animation-delay: .5s; } .waves i:nth-child(3) { animation-delay: 1s; }
+@keyframes wave { from { transform: scale(.3); opacity: .9; } to { transform: scale(2.4); opacity: 0; } }
+
+/* S0 開場 */
+#s0 { display: grid; place-items: center; text-align: center; }
+#s0 .inner.a1 { animation: rise 1s both; }
+#s0 .pre { color: var(--text-3); letter-spacing: .3em; font-size: clamp(11px,1.4vw,16px); }
+#s0 h1 { font-size: clamp(30px,6vw,74px); font-weight: 800; margin-top: .4em; }
+#s0 p { color: var(--text-2); margin-top: 1em; font-size: clamp(13px,1.8vw,20px); }
+#s0 .hero-slot { position: absolute; left: 47%; bottom: 12%; }
+#s0 .hat.a2 { animation: hatOn .6s 1.4s cubic-bezier(.3,1.5,.4,1) both; }
+@keyframes hatOn { from { transform: translateY(-140%); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* S1 大門三關 */
+#s1 .hero-slot { left: -8%; animation: heroToGate 2.4s ease-out both; }
+@keyframes heroToGate { to { left: 17%; } }
+.gatepost { position: absolute; bottom: 16%; width: 1.1%; height: 34%; background: #232d38; border-radius: 3px 3px 0 0; }
+.facebox { position: absolute; width: 6%; aspect-ratio: 1; border: 2px solid var(--teal); border-radius: 12px; opacity: 0; }
+.facebox.a1 { animation: fade .4s 2.5s both; }
+.facebox::after { content: ''; position: absolute; inset: 8% 6%; border-radius: 8px; background: linear-gradient(180deg, transparent 46%, rgba(45,212,191,.5) 50%, transparent 54%); animation: scanline 1.4s linear infinite; animation-play-state: inherit; }
+@keyframes scanline { from { transform: translateY(-30%); } to { transform: translateY(30%); } }
+#s1 .c1.a2 { animation: pop .5s 3.4s both; }
+#s1 .c2.a2 { animation: pop .5s 4.2s both; }
+#s1 .c3.a2 { animation: pop .5s 5.0s both; }
+#s1 .tv { width: 33%; right: 6.5%; top: 13%; }
+#s1 .plusone { position: absolute; right: 12%; top: 8%; color: var(--ok); font-weight: 800; font-size: clamp(16px,2.4vw,30px); opacity: 0; }
+#s1 .plusone.a3 { animation: plus 1.4s 5.9s both; }
+@keyframes plus { 0% { transform: translateY(40%); opacity: 0; } 25% { opacity: 1; } 100% { transform: translateY(-90%); opacity: 0; } }
+
+/* S2 看板 */
+#s2 .hero-slot { left: 14%; animation: s2in 1.6s ease-out both; }
+@keyframes s2in { from { left: -8%; } }
+#s2 .hero-slot .armR { transform: rotate(-150deg); } /* 舉手指看板 */
+#s2 .tv { width: 46%; left: 50%; top: 12%; transform: translateX(-50%); }
+#s2 .tv.a1 { animation: rise .9s both; }
+
+/* S3 AI 提醒戴帽 */
+#s3 .hero-slot { left: 30%; }
+#s3 .hat { opacity: 0; } /* 開場沒戴帽 */
+#s3 .hat.a3 { animation: hatOn .55s 6.4s cubic-bezier(.3,1.5,.4,1) both; }
+#s3 .sweat { position: absolute; left: 34.5%; bottom: 46%; color: var(--amber); font-size: clamp(13px,1.9vw,24px); animation: sweatdrop 1.6s ease-in 4; animation-play-state: inherit; }
+@keyframes sweatdrop { 0% { transform: translateY(0); opacity: 0; } 25% { opacity: 1; } 100% { transform: translateY(180%); opacity: 0; } }
+#s3 .aibox { position: absolute; left: 28.4%; bottom: 15.5%; width: 9.4%; height: 32%; border: 2px solid var(--red); border-radius: 10px; opacity: 0; }
+#s3 .aibox.a1 { animation: pop .5s 1.6s both, aiblink 1s 2.1s linear infinite, aiout .6s 6.9s forwards; }
+@keyframes aiout { to { opacity: 0; } }
+#s3 .aibox b { position: absolute; top: -1.8em; left: -2px; background: var(--red); color: #180505; font-size: clamp(9px,1.2vw,14px); padding: .18em .6em; border-radius: 5px 5px 5px 0; white-space: nowrap; }
+@keyframes aiblink { 50% { border-color: rgba(244,91,91,.3); } }
+#s3 .speaker { position: absolute; right: 18%; top: 22%; width: 2.6%; }
+#s3 .speaker svg { width: 100%; display: block; }
+#s3 .waves { right: 16.5%; top: 19%; }
+#s3 .waves i { animation-delay: 3.2s; } #s3 .waves i:nth-child(2) { animation-delay: 3.7s; } #s3 .waves i:nth-child(3) { animation-delay: 4.2s; }
+#s3 .bubble { position: absolute; right: 22%; top: 20%; background: var(--panel); border: 1px solid var(--line-2); border-radius: 14px 14px 2px 14px; padding: .7em 1.1em; font-size: clamp(11px,1.5vw,17px); opacity: 0; }
+#s3 .bubble.a2 { animation: pop .5s 3.4s both; }
+#s3 .oktag { position: absolute; left: 27%; top: 30%; opacity: 0; }
+#s3 .oktag.a4 { animation: pop .5s 7.2s both; }
+
+/* S4 高溫休息 */
+#s4 .sun { position: absolute; right: 12%; top: 10%; width: 7%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, rgba(251,191,36,.9), rgba(251,191,36,.15) 70%, transparent 72%); animation: sunpulse 2.4s ease-in-out infinite; animation-play-state: inherit; }
+@keyframes sunpulse { 50% { transform: scale(1.08); } }
+#s4 .heat { position: absolute; left: 50%; top: 12%; transform: translateX(-50%); background: rgba(251,191,36,.12); border: 1px solid rgba(251,191,36,.5); color: var(--amber); font-weight: 800; padding: .45em 1.2em; border-radius: 999px; font-size: clamp(13px,1.8vw,21px); }
+#s4 .heat.a1 { animation: pop .5s .4s both; }
+#s4 .bubble { position: absolute; left: 50%; top: 26%; transform: translateX(-50%); background: var(--panel); border: 1px solid var(--line-2); border-radius: 14px; padding: .7em 1.2em; font-size: clamp(12px,1.6vw,18px); opacity: 0; color: var(--text-2); }
+#s4 .bubble.a2 { animation: pop .5s 1.6s both; }
+#s4 .hero-slot { left: 40%; animation: s4in 1.4s ease-out both; }
+@keyframes s4in { from { left: -8%; } }
+#s4 .cup { position: absolute; left: 47.5%; bottom: 42%; font-size: clamp(14px,2vw,26px); opacity: 0; }
+#s4 .cup.a3 { animation: pop .5s 3s both; }
+#s4 .waves { left: 8%; top: 34%; } #s4 .waves.w2 { left: auto; right: 8%; }
+
+/* S5 廠商來訪（真實畫面三連） */
+#s5 .ph { top: 15%; width: 14.5%; opacity: 0; }
+#s5 .p1 { left: 16%; } #s5 .p2 { left: 42.5%; } #s5 .p3 { right: 16%; }
+#s5 .p1.a1 { animation: rise .8s .2s both; }
+#s5 .p2.a2 { animation: rise .8s 2.6s both; }
+#s5 .p3.a3 { animation: rise .8s 5s both; }
+#s5 .who { position: absolute; top: 10%; font-size: clamp(10px,1.3vw,15px); letter-spacing: .12em; color: var(--text-3); opacity: 0; }
+#s5 .w1 { left: 18%; } #s5 .w2 { left: 44.5%; } #s5 .w3 { right: 18%; }
+#s5 .w1.a1 { animation: fade .5s .4s both; } #s5 .w2.a2 { animation: fade .5s 2.8s both; } #s5 .w3.a3 { animation: fade .5s 5.2s both; }
+#s5 .arr { position: absolute; top: 44%; font-size: clamp(18px,2.5vw,32px); color: var(--text-3); opacity: 0; }
+#s5 .ar1 { left: 35%; } #s5 .ar2 { right: 35%; }
+#s5 .ar1.a2 { animation: fade .5s 2.4s both; } #s5 .ar2.a3 { animation: fade .5s 4.8s both; }
+#s5 .hero-slot { left: 4%; width: 4.6%; }
+
+/* S6 出場 */
+#s6 .hero-slot { left: 60%; animation: heroOut 4s .6s ease-in both; }
+@keyframes heroOut { to { left: 108%; } }
+#s6 .minusone { position: absolute; left: 50%; top: 22%; transform: translateX(-50%); text-align: center; }
+#s6 .minusone b { font-size: clamp(46px,9vw,120px); font-weight: 800; font-variant-numeric: tabular-nums; }
+#s6 .minusone span { display: block; color: var(--text-2); font-size: clamp(12px,1.6vw,19px); margin-top: .3em; }
+#s6 .worklog { position: absolute; left: 14%; top: 26%; background: var(--panel); border: 1px solid var(--line-2); border-radius: 12px; padding: 1em 1.3em; font-size: clamp(11px,1.4vw,16px); color: var(--text-2); opacity: 0; }
+#s6 .worklog.a2 { animation: pop .5s 1.6s both; }
+#s6 .worklog b { color: var(--text); display: block; margin-bottom: .3em; }
+
+/* S7 日報 */
+#s7 .doc { position: absolute; left: 50%; top: 18%; transform: translateX(-50%); width: 34%; background: var(--panel); border: 1px solid var(--line-2); border-radius: 12px; padding: 1.5em 1.7em; }
+#s7 .doc h3 { font-size: clamp(13px,1.8vw,20px); }
+#s7 .row { display: flex; justify-content: space-between; margin-top: 1em; font-size: clamp(11px,1.4vw,16px); color: var(--text-2); opacity: 0; }
+#s7 .row b { color: var(--text); font-variant-numeric: tabular-nums; }
+#s7 .r1.a1 { animation: fade .5s .6s both; } #s7 .r2.a1 { animation: fade .5s 1.2s both; }
+#s7 .r3.a1 { animation: fade .5s 1.8s both; } #s7 .r4.a1 { animation: fade .5s 2.4s both; }
+#s7 .stamp { position: absolute; right: -7%; bottom: -10%; border: 3px solid var(--teal); color: var(--teal); font-weight: 800; padding: .3em .8em; border-radius: 10px; transform: rotate(-12deg); opacity: 0; font-size: clamp(12px,1.6vw,19px); }
+#s7 .stamp.a2 { animation: stampin .45s 3.2s cubic-bezier(.3,1.6,.4,1) both; }
+@keyframes stampin { from { transform: rotate(-12deg) scale(2.4); opacity: 0; } to { transform: rotate(-12deg) scale(1); opacity: 1; } }
+
+/* S8 回家 */
+#s8 { background: linear-gradient(180deg, #04060a 55%, #0a0d13); }
+#s8 .house { position: absolute; right: 18%; bottom: 16%; width: 16%; aspect-ratio: 160/120; }
+#s8 .house svg { width: 100%; display: block; }
+#s8 .window { opacity: 0; }
+#s8 .window.a2 { animation: fade 1.2s 2.6s both; }
+#s8 .hero-slot { left: 22%; animation: heroHome 3s ease-out both; }
+@keyframes heroHome { from { left: -8%; } to { left: 22%; } }
+#s8 .moon { position: absolute; left: 10%; top: 10%; width: 3.4%; aspect-ratio: 1; border-radius: 50%; box-shadow: inset -0.6em -0.3em 0 0 #cfd8e3; opacity: .8; }
+#s8 .line1 { position: absolute; left: 50%; top: 30%; transform: translateX(-50%); text-align: center; width: 90%; opacity: 0; }
+#s8 .line1.a3 { animation: rise 1.1s 3.6s both; }
+#s8 .line1 h2 { font-size: clamp(24px,4.6vw,58px); font-weight: 800; }
+#s8 .line1 p { margin-top: .7em; color: var(--text-2); font-size: clamp(12px,1.7vw,20px); }
+#s8 .brand { position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%); color: var(--text-3); font-size: clamp(11px,1.4vw,16px); letter-spacing: .12em; opacity: 0; }
+#s8 .brand.a4 { animation: fade 1s 5s both; }
+#s8 .brand b { color: var(--teal); }
+
+/* ── 瀏覽器網址列（區別「用瀏覽器開的網頁」與原生 App 截圖）── */
+.ph.web .browserbar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 3;
+  height: 7.4%;
+  background: rgba(244, 246, 248, .97);
+  display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid rgba(16, 24, 32, .08);
+}
+.ph.web .browserbar .pill {
+  display: flex; align-items: center; gap: .45em;
+  background: rgba(16, 24, 32, .06);
+  border-radius: 999px;
+  padding: .22em 1.1em;
+  font-size: clamp(8.5px, 1vw, 12px);
+  color: #4b5a64;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+.ph.web .browserbar .pill i { font-style: normal; opacity: .7; }
+</style>
+</head>
+<body>
+<div class="film" id="film">
+
+  <!-- S0 開場 -->
+  <section class="scene" id="s0">
+    <div class="inner a1">
+      <div class="pre">智慧職安平台 · 動畫短片</div>
+      <h1>阿誠的一天</h1>
+      <p>一個模板工，走進一座看得見他的工地。</p>
+    </div>
+    <div class="ground"></div>
+    <div class="hero-slot" data-walk="0"><svg viewBox="0 0 60 130">
+      <g class="hat a2"><path d="M15 26a15 15 0 0 1 30 0z" fill="#fbbf24"/><rect x="12" y="24" width="36" height="4" rx="2" fill="#e5a916"/></g>
+      <circle cx="30" cy="36" r="10" fill="#c9a27e"/>
+      <rect class="armL" x="12" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect x="16" y="48" width="28" height="40" rx="10" fill="#3b82a0"/>
+      <rect class="armR" x="41" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect class="legL" x="19" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+      <rect class="legR" x="32" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+    </svg></div>
+  </section>
+
+  <!-- S1 大門三關 -->
+  <section class="scene" id="s1">
+    <span class="tag"><i></i>第 1 站 · 南側大門</span>
+    <span class="clock"><b>07:00</b></span>
+    <div class="ground"></div>
+    <div class="gatepost" style="left:25%"></div>
+    <div class="facebox a1" style="left:16.2%; top:50%"></div>
+    <span class="chip c1 a2" style="left:10%; top:42%">✓ 阿誠 · 刷臉 1.2 秒</span>
+    <span class="chip c2 a2" style="left:12%; top:33%">✓ 體溫 36.2°C</span>
+    <span class="chip c3 a2" style="left:14%; top:24%">✓ 酒測 0.00</span>
+    <span class="tv"><img src="/shots/boards/board-access.webp" alt="門禁看板" /></span>
+    <b class="plusone a3">在場 +1</b>
+    <div class="hero-slot" data-walk="2400"><svg viewBox="0 0 60 130">
+      <g class="hat"><path d="M15 26a15 15 0 0 1 30 0z" fill="#fbbf24"/><rect x="12" y="24" width="36" height="4" rx="2" fill="#e5a916"/></g>
+      <circle cx="30" cy="36" r="10" fill="#c9a27e"/>
+      <rect class="armL" x="12" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect x="16" y="48" width="28" height="40" rx="10" fill="#3b82a0"/>
+      <rect class="armR" x="41" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect class="legL" x="19" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+      <rect class="legR" x="32" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+    </svg></div>
+    <div class="cap">
+      <h2>三秒，三關。</h2>
+      <p>刷臉、體溫、酒測一次過——阿誠進場的那一秒，<span class="hl">名冊已經 +1</span>。</p>
+    </div>
+  </section>
+
+  <!-- S2 工區看板 -->
+  <section class="scene" id="s2">
+    <span class="tag"><i></i>第 2 站 · 工務所前</span>
+    <span class="clock"><b>07:05</b></span>
+    <div class="ground"></div>
+    <span class="tv a1"><img src="/shots/boards/board-environment.webp" alt="環境看板" /></span>
+    <div class="hero-slot" data-walk="1600"><svg viewBox="0 0 60 130">
+      <g class="hat"><path d="M15 26a15 15 0 0 1 30 0z" fill="#fbbf24"/><rect x="12" y="24" width="36" height="4" rx="2" fill="#e5a916"/></g>
+      <circle cx="30" cy="36" r="10" fill="#c9a27e"/>
+      <rect class="armL" x="12" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect x="16" y="48" width="28" height="40" rx="10" fill="#3b82a0"/>
+      <rect class="armR" x="41" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect class="legL" x="19" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+      <rect class="legR" x="32" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+    </svg></div>
+    <div class="cap">
+      <h2>今天的工地，先看一眼。</h2>
+      <p>熱危害等級、環測數值——<span class="hl">大螢幕掛在那裡</span>，每個人抬頭就知道今天怎麼做工。</p>
+    </div>
+  </section>
+
+  <!-- S3 AI 提醒戴帽 -->
+  <section class="scene" id="s3">
+    <span class="tag"><i></i>第 3 站 · 塔吊區 CAM-03</span>
+    <span class="clock"><b>11:47</b></span>
+    <div class="ground"></div>
+    <span class="sweat">💧</span>
+    <div class="aibox a1"><b>未戴安全帽 · 信心 0.92</b></div>
+    <div class="speaker"><svg viewBox="0 0 26 34"><rect x="2" y="12" width="10" height="12" rx="2" fill="#3a4652"/><path d="M12 12l10-8v28l-10-8z" fill="#4a5866"/></svg></div>
+    <div class="waves"><i></i><i></i><i></i></div>
+    <div class="bubble a2">📢「塔吊區的夥伴，請戴回安全帽。」</div>
+    <span class="chip oktag a4">✓ 已改善 · 事件結案</span>
+    <div class="hero-slot nohat" data-walk="0" id="s3hero"><svg viewBox="0 0 60 130">
+      <g class="hat a3"><path d="M15 26a15 15 0 0 1 30 0z" fill="#fbbf24"/><rect x="12" y="24" width="36" height="4" rx="2" fill="#e5a916"/></g>
+      <circle cx="30" cy="36" r="10" fill="#c9a27e"/>
+      <rect class="armL" x="12" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect x="16" y="48" width="28" height="40" rx="10" fill="#3b82a0"/>
+      <rect class="armR" x="41" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect class="legL" x="19" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+      <rect class="legR" x="32" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+    </svg></div>
+    <div class="cap">
+      <h2>熱到脫帽的那三十秒，有人看著。</h2>
+      <p>AI 看到、廣播提醒、阿誠戴回——<span class="hl">不是抓人，是保人</span>。全程自動留痕。</p>
+    </div>
+  </section>
+
+  <!-- S4 高溫休息 -->
+  <section class="scene" id="s4">
+    <span class="tag"><i></i>第 4 站 · 全工區</span>
+    <span class="clock"><b>14:00</b></span>
+    <div class="ground"></div>
+    <div class="sun"></div>
+    <span class="heat a1">熱危害第 2 級 · 33.4°C</span>
+    <div class="bubble a2">📢「高溫時段，請輪流到遮蔭處休息、補充水分。」</div>
+    <span class="cup a3">🥤</span>
+    <div class="waves"><i></i><i></i><i></i></div>
+    <div class="waves w2"><i></i><i></i><i></i></div>
+    <div class="hero-slot" data-walk="1400"><svg viewBox="0 0 60 130">
+      <g class="hat"><path d="M15 26a15 15 0 0 1 30 0z" fill="#fbbf24"/><rect x="12" y="24" width="36" height="4" rx="2" fill="#e5a916"/></g>
+      <circle cx="30" cy="36" r="10" fill="#c9a27e"/>
+      <rect class="armL" x="12" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect x="16" y="48" width="28" height="40" rx="10" fill="#3b82a0"/>
+      <rect class="armR" x="41" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect class="legL" x="19" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+      <rect class="legR" x="32" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+    </svg></div>
+    <div class="cap">
+      <h2>不是有人盯著溫度計，是系統自己開口。</h2>
+      <p>環測超標，<span class="hl">全區自動廣播</span>——該休息的時候，沒有人被漏掉。</p>
+    </div>
+  </section>
+
+  <!-- S5 廠商來訪 -->
+  <section class="scene" id="s5">
+    <span class="tag"><i></i>第 5 站 · 大門 L-01 車道</span>
+    <span class="clock"><b>15:30</b></span>
+    <div class="ground"></div>
+    <span class="who w1 a1">① 保全的手機</span>
+    <span class="who w2 a2">② 材料商的手機</span>
+    <span class="who w3 a3">③ 保全的手機</span>
+    <span class="ph p1 a1"><img src="/shots/app/app-visitor-qr.webp" alt="登記 QR" /></span>
+    <span class="arr ar1 a2">→</span>
+    <span class="ph p2 web a2">
+      <span class="browserbar"><span class="pill"><i>🔒</i>xxxx.xxx</span></span>
+      <img src="/shots/app/web-visitor-form.webp" alt="訪客表單（於手機瀏覽器開啟的網頁）" />
+    </span>
+    <span class="arr ar2 a3">→</span>
+    <span class="ph p3 a3"><img src="/shots/app/app-visitor-approve.webp" alt="核可放行" /></span>
+    <div class="hero-slot" data-walk="0"><svg viewBox="0 0 60 130">
+      <g class="hat"><path d="M15 26a15 15 0 0 1 30 0z" fill="#fbbf24"/><rect x="12" y="24" width="36" height="4" rx="2" fill="#e5a916"/></g>
+      <circle cx="30" cy="36" r="10" fill="#c9a27e"/>
+      <rect class="armL" x="12" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect x="16" y="48" width="28" height="40" rx="10" fill="#3b82a0"/>
+      <rect class="armR" x="41" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect class="legL" x="19" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+      <rect class="legR" x="32" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+    </svg></div>
+    <div class="cap">
+      <h2>阿誠叫的料到了，車卻是生面孔。</h2>
+      <p>保全出示 QR、材料商自己填、核可放行——<span class="hl">阿誠不用跑大門一趟</span>。</p>
+    </div>
+  </section>
+
+  <!-- S6 出場 -->
+  <section class="scene" id="s6">
+    <span class="tag"><i></i>第 6 站 · 南側大門</span>
+    <span class="clock"><b>17:30</b></span>
+    <div class="ground"></div>
+    <div class="minusone"><b>27 → 26</b><span>出場即清點 · 在場 −1</span></div>
+    <div class="worklog a2"><b>阿誠 · 今日</b>07:00 進場 · 17:30 出場<br/>工時已記錄 · 0 異常</div>
+    <div class="hero-slot walking-keep" data-walk="4600"><svg viewBox="0 0 60 130">
+      <g class="hat"><path d="M15 26a15 15 0 0 1 30 0z" fill="#fbbf24"/><rect x="12" y="24" width="36" height="4" rx="2" fill="#e5a916"/></g>
+      <circle cx="30" cy="36" r="10" fill="#c9a27e"/>
+      <rect class="armL" x="12" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect x="16" y="48" width="28" height="40" rx="10" fill="#3b82a0"/>
+      <rect class="armR" x="41" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect class="legL" x="19" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+      <rect class="legR" x="32" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+    </svg></div>
+    <div class="cap">
+      <h2>下班。他的今天，系統都記得。</h2>
+      <p>進出、工時、異常——<span class="hl">一筆一筆</span>，不靠任何人手寫。</p>
+    </div>
+  </section>
+
+  <!-- S7 日報 -->
+  <section class="scene" id="s7">
+    <span class="tag"><i></i>第 7 站 · 系統</span>
+    <span class="clock"><b>23:59</b></span>
+    <div class="doc">
+      <h3>施工日報 · 2026/07/12</h3>
+      <div class="row r1 a1"><span>出工人數</span><b>63 人次</b></div>
+      <div class="row r2 a1"><span>車輛進出</span><b>36 車次</b></div>
+      <div class="row r3 a1"><span>環境超標事件</span><b>3 次 · 均已自動廣播</b></div>
+      <div class="row r4 a1"><span>阿誠（模板工）</span><b>07:00–17:30 · 0 異常</b></div>
+      <span class="stamp a2">已鎖版 ✓</span>
+    </div>
+    <div class="cap">
+      <h2>他不用寫日報，日報自己寫他。</h2>
+      <p>每個人的一天都在裡面——<span class="hl">勞檢來的那天，一秒調出來</span>。</p>
+    </div>
+  </section>
+
+  <!-- S8 回家 -->
+  <section class="scene" id="s8">
+    <div class="moon"></div>
+    <div class="ground"></div>
+    <div class="house"><svg viewBox="0 0 160 120">
+      <path d="M10 60 L80 12 L150 60 Z" fill="#1a222c"/>
+      <rect x="24" y="60" width="112" height="58" fill="#141b24"/>
+      <rect class="window a2" x="88" y="76" width="26" height="24" rx="3" fill="#fbbf24" opacity=".85"/>
+      <rect x="44" y="80" width="18" height="38" rx="2" fill="#0d1218"/>
+    </svg></div>
+    <div class="hero-slot" data-walk="2900"><svg viewBox="0 0 60 130">
+      <circle cx="30" cy="36" r="10" fill="#c9a27e"/>
+      <rect class="armL" x="12" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect x="16" y="48" width="28" height="40" rx="10" fill="#3b82a0"/>
+      <rect class="armR" x="41" y="50" width="7" height="30" rx="3.5" fill="#2e6a86"/>
+      <rect class="legL" x="19" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+      <rect class="legR" x="32" y="88" width="9" height="34" rx="4.5" fill="#26303c"/>
+    </svg></div>
+    <div class="line1 a3">
+      <h2>讓每一個進工地的人，平安回家。</h2>
+      <p>這就是我們做這套系統的原因。</p>
+    </div>
+    <div class="brand a4">◉ <b>智慧職安平台</b> · 影像 · 門禁 · 環境 · AI · 廣播 · 日報</div>
+  </section>
+
+  <div class="bar">
+    <button id="pp" type="button">⏸ 暫停</button>
+    <div class="segs" id="segs"></div>
+    <button id="re" type="button">↺ 重播</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const SCENES = [
+    { id: 's0', dur: 6500 },
+    { id: 's1', dur: 11000 },
+    { id: 's2', dur: 8500 },
+    { id: 's3', dur: 12500 },
+    { id: 's4', dur: 10000 },
+    { id: 's5', dur: 12500 },
+    { id: 's6', dur: 9500 },
+    { id: 's7', dur: 9000 },
+    { id: 's8', dur: 12000 },
+  ];
+  const segsEl = document.getElementById('segs');
+  const ppBtn = document.getElementById('pp');
+  const reBtn = document.getElementById('re');
+  const els = SCENES.map((s) => document.getElementById(s.id));
+  const segs = SCENES.map((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'seg'; d.innerHTML = '<i></i>';
+    d.addEventListener('click', () => goto(i));
+    segsEl.appendChild(d);
+    return d;
+  });
+
+  let cur = -1, playing = true, t0 = 0, acc = 0;
+  let walkTimers = [];
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function goto(i) {
+    cur = i; acc = 0; t0 = performance.now();
+    walkTimers.forEach(clearTimeout); walkTimers = [];
+    els.forEach((el, k) => el.classList.toggle('on', k === i));
+    segs.forEach((s, k) => { s.classList.toggle('done', k < i); if (k >= i) s.querySelector('i').style.width = '0%'; });
+    const el = els[i];
+    // 重置該幕動畫（每次進幕重播）
+    el.querySelectorAll('.a1,.a2,.a3,.a4').forEach((n) => { n.style.animation = 'none'; void n.offsetWidth; n.style.animation = ''; });
+    // 主角走路循環：data-walk 毫秒後停下（0 = 不走）
+    el.querySelectorAll('.hero-slot').forEach((h) => {
+      h.classList.remove('walking');
+      const ms = +h.dataset.walk || 0;
+      if (ms > 0 && !reduced) {
+        h.classList.add('walking');
+        walkTimers.push(setTimeout(() => h.classList.remove('walking'), ms));
+      }
+    });
+  }
+  function tick(now) {
+    requestAnimationFrame(tick);
+    if (!playing || cur < 0) return;
+    const t = acc + (now - t0);
+    const d = SCENES[cur].dur;
+    segs[cur].querySelector('i').style.width = Math.min(100, (t / d) * 100) + '%';
+    if (t >= d) { if (cur < SCENES.length - 1) goto(cur + 1); else pause(); }
+  }
+  function pause() { if (!playing) return; playing = false; acc += performance.now() - t0; ppBtn.textContent = '▶ 播放'; }
+  function play() { if (playing) return; playing = true; t0 = performance.now(); ppBtn.textContent = '⏸ 暫停'; }
+  ppBtn.addEventListener('click', () => (playing ? pause() : play()));
+  reBtn.addEventListener('click', () => { goto(0); play(); });
+  document.addEventListener('keydown', (e) => { if (e.key === ' ') { e.preventDefault(); playing ? pause() : play(); } });
+
+  window.__film = { goto, pause, play, scenes: SCENES.length };
+  goto(0);
+  if (reduced) pause();
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
