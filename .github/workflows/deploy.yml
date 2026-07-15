@@ -30,12 +30,11 @@ jobs:
       - name: Build (static export)
         run: npm run build
         env:
-          # 專案頁網址是 https://<org>.github.io/ssp-website/，見 next.config.ts /
-          # src/lib/asset-path.ts。若之後改自訂網域（從根目錄 serve），把這兩行改成
-          # NEXT_PUBLIC_SITE_ORIGIN=https://<自訂網域>、NEXT_PUBLIC_BASE_PATH 拿掉即可。
-          # basePath 要跟 repo 名稱一致（目前是 ssp-website，不是資料夾名稱 ssp-marketing-site）。
-          NEXT_PUBLIC_BASE_PATH: /ssp-website
-          NEXT_PUBLIC_SITE_ORIGIN: https://lyztw-tech.github.io
+          # 自訂網域（public/CNAME），從網域根目錄 serve，不需要 basePath。
+          # 換回 github.io 預設網址的話：NEXT_PUBLIC_SITE_ORIGIN 改
+          # https://lyztw-tech.github.io、NEXT_PUBLIC_BASE_PATH 補回 /ssp-website，
+          # 並把 public/CNAME 刪掉。
+          NEXT_PUBLIC_SITE_ORIGIN: https://about.smart-safety-platform.lyztw.com
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
