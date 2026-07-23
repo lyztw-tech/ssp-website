@@ -5,6 +5,9 @@ import { useEffect, useRef, useState } from 'react';
 import { asset } from '@/lib/asset-path';
 import { Rv } from './reveal';
 
+// TODO：App 上架後換成真實 App Store 連結
+const APP_STORE_URL = '#';
+
 /* ---------- 全螢幕看板：人員/車輛/環境/設備 切換 ---------- */
 
 const BOARDS = [
@@ -107,9 +110,19 @@ export function AppShowcase() {
           <p>
             保全巡到哪，工地就跟到哪——現場影像即時縮圖、告警確認結案、訪客掃碼放行，都在口袋裡。前一秒發生的事，這一秒就在手機上。
           </p>
-          <div className="mini">iOS App · 即時推送 · 畫面為真實系統截圖</div>
+          <div className="mini">iOS App · 即時推送 · 畫面為產品介面示意</div>
+          <a className="appstore-badge" href={APP_STORE_URL} aria-label="在 App Store 下載智慧職安 App">
+            {/* Apple 官方徽章（繁中·白色深底版）— 取自 Apple Marketing Tools */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={asset('/badges/appstore-white-zh-tw.svg')} alt="從 App Store 下載" height={52} />
+          </a>
+          <div className="mini appstore-note">iOS 已推出 · Android 規劃中</div>
         </Rv>
-        <Rv as="figure" className="phone-fig" delay={1}>
+        <Rv as="figure" className="phone-fig app-duo" delay={1}>
+          <span className="phone">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={asset('/shots/app/app-warroom.webp')} alt="智慧職安 App 戰情室主畫面" width={900} height={1761} loading="lazy" />
+          </span>
           <span className="phone">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={asset('/shots/app/app-wall.webp')} alt="智慧職安 App 現場影像即時縮圖" width={900} height={1761} loading="lazy" />
