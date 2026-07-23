@@ -110,7 +110,7 @@ export function AppShowcase() {
           <p>
             保全巡到哪，工地就跟到哪——現場影像即時縮圖、告警確認結案、訪客掃碼放行，都在口袋裡。前一秒發生的事，這一秒就在手機上。
           </p>
-          <div className="mini">iOS App · 即時推送 · 畫面為真實系統截圖</div>
+          <div className="mini">iOS App · 即時推送 · 畫面為產品介面示意</div>
           <a className="appstore-badge" href={APP_STORE_URL} aria-label="在 App Store 下載智慧職安 App">
             {/* Apple 官方徽章（繁中·白色深底版）— 取自 Apple Marketing Tools */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
