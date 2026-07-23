@@ -337,8 +337,29 @@ export function Footer() {
             <a href={CONTACT_MAILTO}>{CONTACT_EMAIL}</a>
           </nav>
         </div>
+        <div className="footer-contact">
+          <div className="footer-co">萊茲特資訊科技</div>
+          <dl>
+            <div>
+              <dt>電話</dt>
+              <dd>
+                <a href="tel:+886282626600">(02) 8262-6600</a>
+              </dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              <dd>
+                <a href="mailto:lyztw@lyztw.com">lyztw@lyztw.com</a>
+              </dd>
+            </div>
+            <div>
+              <dt>地址</dt>
+              <dd>臺北市中正區杭州南路 1 段 6 巷 11 號</dd>
+            </div>
+          </dl>
+        </div>
         <div className="footer-copy">
-          © {new Date().getFullYear()} 智慧職安平台 SITE SAFETY OPS · 台灣開發 · 資料不出境
+          © {new Date().getFullYear()} 智慧職安平台 SITE SAFETY OPS · 萊茲特資訊科技 · 台灣開發 · 資料不出境
         </div>
       </div>
     </footer>
